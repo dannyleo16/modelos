@@ -7,6 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1sI8a_tY7zMZUrqc9GY6fSy3NzDZeMcgc
 """
 
+import time
 import pandas as pd
 from transformers import AutoTokenizer, AutoModelForTokenClassification
 import requests
@@ -18,12 +19,12 @@ import requests
 
 API_URL = "https://api-inference.huggingface.co/models/dccuchile/bert-base-spanish-wwm-uncased-finetuned-ner"
 headers = {"Authorization": "Bearer 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"}
-
+start_time= time.time()
 def query(payload):
 	response = requests.post(API_URL, headers=headers, json=payload)
 	return response.json()
 # Carga el archivo csv
-df = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/ecuPrueba_Alertante1.csv')
+df = pd.read_csv('/content/drive/MyDrive/Colab Notebooks/ecuPrueba_40.csv')
 # Itera sobre cada fila del dataframe
 for index, row in df.iterrows():
     # Realiza la consulta
@@ -33,7 +34,9 @@ for index, row in df.iterrows():
     print(f"ID LLAMADA: {row['TRA_ID']}")
 
  # Procesa la salida
-    for entity in output:
-        # Filtra por tipo 'LABEL_0'
-        if entity['entity_group'] != 'LABEL_0':
-            print(f"Entidad: {entity['word']}, Tipo: {entity['entity_group']}, Confianza: {entity['score']}")
+    print(output)
+
+end_time = time.time()
+execution_time = end_time - start_time
+print(f"Tiempo de ejecución: {execution_time} segundos")
+
